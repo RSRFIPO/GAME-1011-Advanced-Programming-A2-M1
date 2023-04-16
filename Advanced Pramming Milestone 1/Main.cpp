@@ -11,6 +11,11 @@ struct Player
     int m_health;
     int m_attack;
     int m_defense;
+
+    void SetName(string name) { this->name = name;  }
+    void SetHealth(int health) { m_health = health; }
+    void SetAttack(int attack) { m_attack = attack; }
+    void SetDefense(int defense) { m_defense = defense; }
 };
 
 struct Enemy
@@ -19,6 +24,11 @@ struct Enemy
     int m_health;
     int m_attack;
     int m_defense;
+
+    void SetName(string name) { this->name = name; }
+    void SetHealth(int health) { m_health = health; }
+    void SetAttack(int attack) { m_attack = attack; }
+    void SetDefense(int defense) { m_defense = defense; }
 };
 
 void Attack()
@@ -57,10 +67,26 @@ public:
 
 void savePlayerInfo(Player player, const string& fileName)
 {
-    ofstream playerFile(fileName, ios::out | ios::binary);
-    if (playerFile.is_open()) {
-        playerFile.write(reinterpret_cast<char*>(&player), sizeof(player));
+    fstream file;
+	file.open(fileName);
+
+    if (!file) {
+        ofstream playerFile(fileName);
+        playerFile << player.name << endl;
+        playerFile << player.m_health << endl;
+        playerFile << player.m_attack << endl;
+        playerFile << player.m_defense << endl;
         playerFile.close();
+        cout << "Player information saved to file." << endl;
+    }
+    else if (file)
+    {
+        file.clear();
+        file << player.name << endl;
+        file << player.m_health << endl;
+        file << player.m_attack << endl;
+        file << player.m_defense << endl;
+        file.close();
         cout << "Player information saved to file." << endl;
     }
     else {
@@ -68,12 +94,17 @@ void savePlayerInfo(Player player, const string& fileName)
     }
 }
 
-Player loadPlayerInfo(const string& fileName)
+Player loadPlayerInfo(Player player, const string& fileName)
 {
-    Player player;
-    ifstream playerFile(fileName, ios::out | ios::binary);
-    if (playerFile.is_open()) {
-        playerFile.read(reinterpret_cast<char*>(&player), sizeof(player));
+    fstream playerFile(fileName);
+    if (playerFile) {
+        string name;
+        int hp, atk, def;
+        playerFile >> name >> hp >> atk >> def;
+        player.SetName(name);
+        player.SetHealth(hp);
+        player.SetAttack(atk);
+        player.SetDefense(def);
         playerFile.close();
         cout << "Player information loaded from file." << endl;
     }
@@ -85,10 +116,26 @@ Player loadPlayerInfo(const string& fileName)
 
 void saveEnemyInfo(Enemy enemy, const string& fileName)
 {
-    ofstream enemyFile(fileName, ios::out | ios::binary);
-    if (enemyFile.is_open()) {
-        enemyFile.write(reinterpret_cast<char*>(&enemy), sizeof(enemy));
+    fstream file;
+    file.open(fileName);
+
+    if (!file) {
+        ofstream enemyFile(fileName);
+        enemyFile << enemy.name << endl;
+        enemyFile << enemy.m_health << endl;
+        enemyFile << enemy.m_attack << endl;
+        enemyFile << enemy.m_defense << endl;
         enemyFile.close();
+        cout << "Player information saved to file." << endl;
+    }
+    else if (file)
+    {
+        file.clear();
+        file << enemy.name << endl;
+        file << enemy.m_health << endl;
+        file << enemy.m_attack << endl;
+        file << enemy.m_defense << endl;
+        file.close();
         cout << "Enemy information saved to file." << endl;
     }
     else {
@@ -96,12 +143,17 @@ void saveEnemyInfo(Enemy enemy, const string& fileName)
     }
 }
 
-Enemy loadEnemyInfo(const string& fileName)
+Enemy loadEnemyInfo(Enemy enemy, const string& fileName)
 {
-    Enemy enemy;
-    ifstream enemyFile(fileName, ios::out | ios::binary);
-    if (enemyFile.is_open()) {
-        enemyFile.read(reinterpret_cast<char*>(&enemy), sizeof(enemy));
+    fstream enemyFile(fileName);
+    if (enemyFile) {
+        string name;
+        int hp, atk, def;
+        enemyFile >> name >> hp >> atk >> def;
+        enemy.SetName(name);
+        enemy.SetHealth(hp);
+        enemy.SetAttack(atk);
+        enemy.SetDefense(def);
         enemyFile.close();
         cout << "Enemy information loaded from file." << endl;
     }
@@ -134,29 +186,31 @@ int main()
 {
     map<string, Command*> commands;
     commands["Swing Sword"] = new AttackCommand();
+    commands["swing sword"] = new AttackCommand();
     commands["Raise Shield"] = new DefendCommand();
+    commands["raise shield"] = new DefendCommand();
 
-    Player player = { "Player", 10, 10, 10 };
-    savePlayerInfo(player, "player.bin");
-    Player loadedPlayer = loadPlayerInfo("player.bin");
-    cout << "Player name: " << loadedPlayer.name << endl;
-    cout << "Player health: " << loadedPlayer.m_health << endl;
-    cout << "Player attack: " << loadedPlayer.m_attack << endl;
-    cout << "Player defense: " << loadedPlayer.m_defense << endl;
+    Player tempPlayer = { "Player", 10, 10, 10 };
+    savePlayerInfo(tempPlayer, "player.txt");
+    Player player = loadPlayerInfo(tempPlayer, "player.txt");
+    cout << "\nPlayer name: " << player.name << endl;
+    cout << "Player health: " << player.m_health << endl;
+    cout << "Player attack: " << player.m_attack << endl;
+    cout << "Player defense: " << player.m_defense << "\n\n";
 
-    Enemy enemy = { "Enemy", 5, 5, 3 };
-    saveEnemyInfo(enemy, "enemy.bin");
-	Enemy loadedEnemy = loadEnemyInfo("enemy.bin");
-    cout << "Enemy name: " << loadedEnemy.name << endl;
-    cout << "Enemy health: " << loadedEnemy.m_health << endl;
-    cout << "Enemy attack: " << loadedEnemy.m_attack << endl;
-    cout << "Enemy defense: " << loadedEnemy.m_defense << endl;
+    Enemy tempEnemy = { "Enemy", 5, 5, 3 };
+    saveEnemyInfo(tempEnemy, "enemy.txt");
+	Enemy enemy = loadEnemyInfo(tempEnemy, "enemy.txt");
+    cout << "\nEnemy name: " << enemy.name << endl;
+    cout << "Enemy health: " << enemy.m_health << endl;
+    cout << "Enemy attack: " << enemy.m_attack << endl;
+    cout << "Enemy defense: " << enemy.m_defense << "\n\n";
 
 
     string input;
     cout << "Enter a command (Swing Sword or Raise Shield): ";
     getline(cin, input);
-
+    
     if (commands.count(input) > 0) 
     {
         commands[input]->execute();
