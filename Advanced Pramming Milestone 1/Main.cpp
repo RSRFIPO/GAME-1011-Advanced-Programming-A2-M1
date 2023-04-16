@@ -164,17 +164,22 @@ Enemy loadEnemyInfo(Enemy enemy, const string& fileName)
 }
 
 
-void loadDialog(string fileName)
+void loadDialog(int num, string fileName)
 {
     ifstream dialogFile(fileName);
-    if (dialogFile.is_open()) 
+	string line;
+    int currLine = 0;
+
+    if(!dialogFile.fail())
     {
-        string line;
-        while (getline(dialogFile, line)) 
-        {
-            cout << line << endl;
-        }
-        dialogFile.close();
+	    while(!dialogFile.eof())
+	    {
+	    	currLine++;
+	    	getline(dialogFile, line);
+	    	if (currLine == num) break;
+	    }
+        cout << line << endl;
+    	dialogFile.close();
     }
     else 
     {
@@ -210,11 +215,11 @@ int main()
     string input;
     cout << "Enter a command (Swing Sword or Raise Shield): ";
     getline(cin, input);
-    
+
     if (commands.count(input) > 0) 
     {
         commands[input]->execute();
-        loadDialog("dialog.txt");
+        loadDialog(1, "dialog.txt");
     }
     else 
     {
