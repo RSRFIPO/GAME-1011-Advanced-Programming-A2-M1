@@ -45,6 +45,7 @@ class Command
 {
 public:
     virtual void execute() = 0;
+    virtual bool GetProceed() = 0;
 };
 
 class AttackCommand : public Command
@@ -54,6 +55,8 @@ public:
 	{
         Attack();
     }
+    bool GetProceed() { return proceed; }
+    bool proceed;
 };
 
 class DefendCommand : public Command
@@ -63,6 +66,8 @@ public:
 	{
         Defend();
     }
+    bool GetProceed() { return proceed; }
+    bool proceed;
 };
 
 void savePlayerInfo(Player player, const string& fileName)
@@ -187,44 +192,128 @@ void loadDialog(int num, string fileName)
     }
 }
 
+class ActionCommand : public Command
+{
+public:
+    ActionCommand(int num, bool proc = false) { number = num; proceed = proc; }
+    void execute()
+    {
+        loadDialog(number, "dialog.txt");
+    }
+    bool GetProceed() { return proceed; }
+    int number;
+    bool proceed;
+};
+
+class ProceedCommand :public Command
+{
+public:
+    ProceedCommand(int num, bool proc = false) { number = num; proceed = proc; }
+    void execute()
+    {
+        loadDialog(number, "dialog.txt");
+        if (proceed == false)
+            proceed = true;
+        else
+            proceed = false;
+    }
+    bool GetProceed() { return proceed; }
+    int number;
+    bool proceed;
+};
+
 int main()
 {
     map<string, Command*> commands;
     commands["Swing Sword"] = new AttackCommand();
     commands["swing sword"] = new AttackCommand();
+
     commands["Raise Shield"] = new DefendCommand();
     commands["raise shield"] = new DefendCommand();
 
     Player tempPlayer = { "Player", 10, 10, 10 };
     savePlayerInfo(tempPlayer, "player.txt");
     Player player = loadPlayerInfo(tempPlayer, "player.txt");
-    cout << "\nPlayer name: " << player.name << endl;
-    cout << "Player health: " << player.m_health << endl;
-    cout << "Player attack: " << player.m_attack << endl;
-    cout << "Player defense: " << player.m_defense << "\n\n";
+    //cout << "\nPlayer name: " << player.name << endl;
+    //cout << "Player health: " << player.m_health << endl;
+    //cout << "Player attack: " << player.m_attack << endl;
+    //cout << "Player defense: " << player.m_defense << "\n\n";
+    //
+    //Enemy tempEnemy = { "Enemy", 5, 5, 3 };
+    //saveEnemyInfo(tempEnemy, "enemy.txt");
+	//Enemy enemy = loadEnemyInfo(tempEnemy, "enemy.txt");
+    //cout << "\nEnemy name: " << enemy.name << endl;
+    //cout << "Enemy health: " << enemy.m_health << endl;
+    //cout << "Enemy attack: " << enemy.m_attack << endl;
+    //cout << "Enemy defense: " << enemy.m_defense << "\n\n";
+    //
+    //
+    //string input;
+    //cout << "Enter a command (Swing Sword or Raise Shield): ";
+    //getline(cin, input);
+    //
+    //if (commands.count(input) > 0) 
+    //{
+    //    commands[input]->execute();
+    //    loadDialog(1, "dialog.txt");
+    //}
+    //else 
+    //{
+    //    cout << "Invalid command!" << endl;
+    //}
 
-    Enemy tempEnemy = { "Enemy", 5, 5, 3 };
-    saveEnemyInfo(tempEnemy, "enemy.txt");
-	Enemy enemy = loadEnemyInfo(tempEnemy, "enemy.txt");
-    cout << "\nEnemy name: " << enemy.name << endl;
-    cout << "Enemy health: " << enemy.m_health << endl;
-    cout << "Enemy attack: " << enemy.m_attack << endl;
-    cout << "Enemy defense: " << enemy.m_defense << "\n\n";
+	cout << "\n\n";
+    loadDialog(1, "dialog.txt");
+    loadDialog(2, "dialog.txt");
 
-
+    bool isRunning = true;
     string input;
-    cout << "Enter a command (Swing Sword or Raise Shield): ";
-    getline(cin, input);
 
-    if (commands.count(input) > 0) 
+    do
     {
-        commands[input]->execute();
-        loadDialog(1, "dialog.txt");
+        commands["Go Through"] = new ProceedCommand(9);
+        bool isMainRoom = false;
+
+        cout << "\n\n";
+        getline(cin, input);
+
+        if (commands.count(input) > 0)
+        {
+            commands[input]->execute();
+            if (commands[input]->GetProceed() == true)
+                isMainRoom = true;
+            else
+                isMainRoom = false;
+        }
+        else
+        {
+            cout << "That's not something you can do.";
+        }
+
+        while (isMainRoom)
+        {
+            commands["Inspect Door"] = new ActionCommand(3);
+            commands["Inspect door"] = new ActionCommand(3);
+            commands["inspect door"] = new ActionCommand(3);
+            commands["Check Door"] = new ActionCommand(3);
+            commands["Check door"] = new ActionCommand(3);
+            commands["check door"] = new ActionCommand(3);
+
+	        cout << "\n\n";
+        	getline(cin, input);
+
+        	if(commands.count(input) > 0)
+        	{
+        		commands[input]->execute();
+        	}
+        	else
+        	{
+        		cout << "That's not something you can do.";
+        	}
+        }
     }
-    else 
-    {
-        cout << "Invalid command!" << endl;
-    }
+    while (isRunning);
+    
 
     return 0;
 }
