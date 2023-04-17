@@ -3,6 +3,8 @@
 #include <map>
 #include <string>
 
+#include "Cpp_List.h"
+
 using namespace std;
 
 struct Player
@@ -164,8 +166,14 @@ public:
     {
         if (action)
         {
-	        loadDialog(1, "dialog.txt");
-        	item = false;
+            loadDialog(1, "dialog.txt");
+            item = false;
+        }
+        else if (GetType() == "Main Hall" || GetType() == "Main Room" || GetType() == "Music Room"
+			|| GetType() == "Reception Room" || GetType() == "Dining Room" || GetType() == "Kitchen" 
+            || GetType() == "Storage Room")
+        {
+            loadDialog(number, "dialog.txt");
         }
         else
         {
@@ -194,6 +202,7 @@ public:
 int main()
 {
     map<string, Command*> commands;
+    List<string> inventory;
 
     Player tempPlayer = { "Player", 10, 10, 10 };
     savePlayerInfo(tempPlayer, "player.txt");
@@ -211,7 +220,7 @@ int main()
     //cout << "Enemy attack: " << enemy.m_attack << endl;
     //cout << "Enemy defense: " << enemy.m_defense << "\n\n";
 
-    cout << "Warning: commands only take lower cases.\n";
+    cout << "\nWarning: commands only take lower cases.\n";
 	cout << "\n\n";
     loadDialog(2, "dialog.txt");
     loadDialog(3, "dialog.txt");
@@ -230,6 +239,7 @@ int main()
     commands["go down"] = new Command(12, "Main Hall");
 
     commands["go back"] = new Command(11, "Main Room");
+
 
     do
     {
@@ -263,8 +273,7 @@ int main()
 
                 if (commands[input]->GetType() == "White Marble" && commands[input]->GetItem() == true)
                 {
-	                marbleCnt++;
-                	cout << marbleCnt << endl;
+                    inventory.Add("White Marble");
                 }
         	}
         	else
