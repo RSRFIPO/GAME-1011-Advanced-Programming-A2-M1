@@ -171,7 +171,13 @@ public:
         }
         else if (GetType() == "Main Hall" || GetType() == "Main Room" || GetType() == "Music Room"
 			|| GetType() == "Reception Room" || GetType() == "Dining Room" || GetType() == "Kitchen" 
-            || GetType() == "Storage Room")
+            || GetType() == "Storage Room" || GetType() == "Cabinets")
+        {
+            loadDialog(number, "dialog.txt");
+        }
+        else if(GetType() == "Zero" || GetType() == "One" || GetType() == "Two" || GetType() == "Three" ||
+            GetType() == "Four" || GetType() == "Five" || GetType() == "Six" || GetType() == "Seven" || 
+            GetType() == "Eight" || GetType() == "Nine")
         {
             loadDialog(number, "dialog.txt");
         }
@@ -204,16 +210,15 @@ int main()
     List<string> inventory;
 
     cout << "Warning: commands only take lower cases.\n"
-			"         and there are no boundaries between rooms. Proceed with caution.";
-	cout << "\n\n\n";
+        "         and there are no boundaries between rooms. Proceed with caution.";
+    cout << "\n\n\n";
     loadDialog(3, "dialog.txt");
 
     bool isRunning = true;
-    bool knife = false, candle = false;
+    bool pen = false, candle = false;
     string input;
-    int marbleCnt = 0;
 
-	commands["check door"] = new Command(4, "none");
+    commands["check door"] = new Command(4, "none");
     commands["open door"] = new Command(5, "none");
     commands["check vase"] = new Command(6, "none");
     commands["break vase"] = new Command(7, "none");
@@ -228,14 +233,14 @@ int main()
 
     commands["go hall"] = new Command(13, "Main Hall");
     commands["check piano"] = new Command(16, "none");
-    commands["use pen"] = new Command(17, "none");
+    commands["use pen"] = new Command(17, "Use Pen");
     commands["take gmarble"] = new Command(18, "Green Marble");
 
     commands["check bookshelf"] = new Command(21, "none");
     commands["check curtains"] = new Command(22, "none");
     commands["check desk"] = new Command(23, "none");
     commands["take pen"] = new Command(24, "Pen");
-    commands["check cabinets"] = new Command(25, "none");
+    commands["check cabinets"] = new Command(25, "Cabinets");
     commands["input zero"] = new Command(26, "Zero");
     commands["input one"] = new Command(27, "One");
     commands["input two"] = new Command(28, "Two");
@@ -246,14 +251,14 @@ int main()
     commands["input seven"] = new Command(33, "Seven");
     commands["input eight"] = new Command(34, "Eight");
     commands["input nine"] = new Command(35, "Nine");
-    commands["take pmarble"] = new Command(36, "Purple Marble");
+    commands["take pmarble"] = new Command(38, "Purple Marble");
 
     commands["check table"] = new Command(41, "none");
     commands["take plate"] = new Command(42, "none");
     commands["take fork"] = new Command(42, "none");
     commands["take butterknife"] = new Command(42, "none");
     commands["take candle"] = new Command(43, "Candle");
-    commands["light candles"] = new Command(44, "none");
+    commands["light candles"] = new Command(44, "Use Candle");
     commands["take bmarble"] = new Command(45, "Blue Marble");
 
     commands["white marble"] = new Command(48, "none");
@@ -268,12 +273,112 @@ int main()
         while (isMainRoom)
         {
             bool isMainHall = false;
-	        cout << "\n\n";
-        	getline(cin, input);
 
-        	if(commands.count(input) > 0)
-        	{
-        		commands[input]->Execute();
+            if (commands["take wmarble"]->GetItem() && commands["take bmarble"]->GetItem() &&
+                commands["take pmarble"]->GetItem() && commands["take gmarble"]->GetItem())
+            {
+                loadDialog(47, "dialog.txt");
+                cout << "\n\n";
+                getline(cin, input);
+
+                if (commands.count(input) > 0)
+                    commands[input]->Execute();
+                else
+                    cout << "That's not something you can do.";
+
+                if (commands[input] == commands["white marble"])
+                {
+                    cout << "\n\n";
+                    getline(cin, input);
+
+                    if (commands.count(input) > 0)
+                        commands[input]->Execute();
+                    else
+                        cout << "That's not something you can do.";
+
+                    if (commands[input] == commands["blue marble"])
+                    {
+                        cout << "\n\n";
+                        getline(cin, input);
+
+                        if (commands.count(input) > 0)
+                            commands[input]->Execute();
+                        else
+                            cout << "That's not something you can do.";
+                        if (commands[input] == commands["green marble"])
+                        {
+                            cout << "\n\n";
+                            getline(cin, input);
+
+                            if (commands.count(input) > 0)
+                                commands[input]->Execute();
+                            else
+                                cout << "That's not something you can do.";
+                            if (commands[input] == commands["purple marble"])
+                            {
+                                loadDialog(53, "dialog.txt");
+                                isRunning = false;
+                            }
+                            else
+                            {
+                                loadDialog(52, "dialog.txt");
+                                isRunning = false;
+                            }
+                        }
+                        else
+                        {
+                            cout << "\n\n";
+                            getline(cin, input);
+
+                            if (commands.count(input) > 0)
+                                commands[input]->Execute();
+                            else
+                                cout << "That's not something you can do.";
+
+                            loadDialog(52, "dialog.txt");
+                            isRunning = false;
+                        }
+                    }
+                    else
+                    {
+                        for (unsigned i = 0; i < 2; i++)
+                        {
+                            cout << "\n\n";
+                            getline(cin, input);
+
+                            if (commands.count(input) > 0)
+                                commands[input]->Execute();
+                            else
+                                cout << "That's not something you can do.";
+                        }
+
+                        loadDialog(52, "dialog.txt");
+                        isRunning = false;
+                    }
+                }
+                else
+                {
+                    for (unsigned i = 0; i < 3; i++)
+                    {
+                        cout << "\n\n";
+                        getline(cin, input);
+
+                        if (commands.count(input) > 0)
+                            commands[input]->Execute();
+                        else
+                            cout << "That's not something you can do.";
+                    }
+
+                    loadDialog(52, "dialog.txt");
+                    isRunning = false;
+                }
+            }
+            cout << "\n\n";
+            getline(cin, input);
+
+            if (commands.count(input) > 0)
+            {
+                commands[input]->Execute();
                 if (commands[input]->GetProceed() == true)
                 {
                     if (commands[input]->GetType() == "Main Hall")
@@ -285,13 +390,12 @@ int main()
                 if (commands[input]->GetType() == "White Marble" && commands[input]->GetItem() == true)
                 {
                     inventory.Add(commands[input]->GetType());
-                    marbleCnt++;
                 }
-        	}
-        	else
-        	{
-        		cout << "That's not something you can do.";
-        	}
+            }
+            else
+            {
+                cout << "That's not something you can do.";
+            }
 
             while (isMainHall)
             {
@@ -324,7 +428,7 @@ int main()
                     cout << "That's not something you can do.";
                 }
 
-                while(isMusicRoom)
+                while (isMusicRoom)
                 {
                     cout << "\n\n";
                     getline(cin, input);
@@ -339,14 +443,16 @@ int main()
                         }
                         else
                             isMusicRoom = true;
-                    }
 
-                    if (commands[input]->GetType() == "Green Marble" && commands[input]->GetItem() == true)
-                    {
-                        inventory.Add(commands[input]->GetType());
-                        marbleCnt++;
+                        if (commands[input]->GetType() == "Use Pen" && pen)
+                        {
+                            inventory.Remove(commands[input]->GetType());
+                        }
+                        else if (commands[input]->GetType() == "Green Marble" && commands[input]->GetItem() == true)
+                        {
+                            inventory.Add(commands[input]->GetType());
+                        }
                     }
-
                     else
                     {
                         cout << "That's not something you can do.";
@@ -368,53 +474,164 @@ int main()
                         }
                         else
                             isReceptionRoom = true;
-                    }
 
-                    if (commands[input]->GetType() == "Purple Marble" && commands[input]->GetItem() == true)
-                    {
-                        inventory.Add(commands[input]->GetType());
-                        marbleCnt++;
-                    }
-
-                    else
-                    {
-                        cout << "That's not something you can do.";
-                    }
-                }
-
-                while (isDiningRoom)
-                {
-                    cout << "\n\n";
-                    getline(cin, input);
-
-                    if (commands.count(input) > 0)
-                    {
-                        commands[input]->Execute();
-                        if (commands[input]->GetProceed() == true)
+                        if (commands[input]->GetType() == "Purple Marble" && commands[input]->GetItem() == true)
                         {
-                            if (commands[input]->GetType() == "Main Hall")
-                                isDiningRoom = false;
+                            inventory.Add(commands[input]->GetType());
+                        }
+                        else if (commands[input]->GetType() == "Pen" && commands[input]->GetItem() == true)
+                        {
+                            inventory.Add(commands[input]->GetType());
+                            pen = true;
+                        }
+
+                        if (commands[input]->GetType() == "Cabinets")
+                        {
+                            bool isAttempting = true;
+                            while (isAttempting)
+                            {
+	                            cout << "\n\n";
+                            	getline(cin, input);
+
+                            	if (commands.count(input) > 0)
+                            		commands[input]->Execute();
+                            	else
+                            		cout << "That's not something you can do.";
+
+                            	if (commands[input] == commands["input six"])
+                            	{
+                            		cout << "\n\n";
+                            		getline(cin, input);
+
+                            		if (commands.count(input) > 0)
+                            			commands[input]->Execute();
+                            		else
+                            			cout << "That's not something you can do.";
+
+                            		if (commands[input] == commands["input nine"])
+                            		{
+                            			cout << "\n\n";
+                            			getline(cin, input);
+
+                            			if (commands.count(input) > 0)
+                            				commands[input]->Execute();
+                            			else
+                            				cout << "That's not something you can do.";
+                            			if (commands[input] == commands["input four"])
+                            			{
+                            				cout << "\n\n";
+                            				getline(cin, input);
+
+                            				if (commands.count(input) > 0)
+                            					commands[input]->Execute();
+                            				else
+                            					cout << "That's not something you can do.";
+                            				if (commands[input] == commands["input one"])
+                            				{
+                            					loadDialog(37, "dialog.txt");
+                                                isAttempting = false;
+                            				}
+                            				else
+                            				{
+                            					loadDialog(36, "dialog.txt");
+                                                isAttempting = false;
+                            				}
+                            			}
+                            			else
+                            			{
+                            				cout << "\n\n";
+                            				getline(cin, input);
+
+                            				if (commands.count(input) > 0)
+                            					commands[input]->Execute();
+                            				else
+                            					cout << "That's not something you can do.";
+
+                            				loadDialog(36, "dialog.txt");
+                                            isAttempting = false;
+                            			}
+                            		}
+                            		else
+                            		{
+                            			for (unsigned i = 0; i < 2; i++)
+                            			{
+                            				cout << "\n\n";
+                            				getline(cin, input);
+
+                            				if (commands.count(input) > 0)
+                            					commands[input]->Execute();
+                            				else
+                            					cout << "That's not something you can do.";
+                            			}
+
+                            			loadDialog(36, "dialog.txt");
+                                        isAttempting = false;
+                            		}
+                            	}
+                            	else
+                            	{
+                            		for (unsigned i = 0; i < 3; i++)
+                            		{
+                            			cout << "\n\n";
+                            			getline(cin, input);
+
+                            			if (commands.count(input) > 0)
+                            				commands[input]->Execute();
+                            			else
+                            				cout << "That's not something you can do.";
+                            		}
+
+                            		loadDialog(36, "dialog.txt");
+                            		isAttempting = false;
+                            	}
+                            }
                         }
                         else
-                            isDiningRoom = true;
+                        {
+                            cout << "That's not something you can do.";
+                        }
                     }
 
-                    if (commands[input]->GetType() == "Blue Marble" && commands[input]->GetItem() == true)
+                    while (isDiningRoom)
                     {
-                        inventory.Add(commands[input]->GetType());
-                        marbleCnt++;
-                    }
+                        cout << "\n\n";
+                        getline(cin, input);
 
-                    else
-                    {
-                        cout << "That's not something you can do.";
+                        if (commands.count(input) > 0)
+                        {
+                            commands[input]->Execute();
+                            if (commands[input]->GetProceed() == true)
+                            {
+                                if (commands[input]->GetType() == "Main Hall")
+                                    isDiningRoom = false;
+                            }
+                            else
+                                isDiningRoom = true;
+
+                            if (commands[input]->GetType() == "Blue Marble" && commands[input]->GetItem() == true)
+                            {
+                                inventory.Add(commands[input]->GetType());
+                            }
+                            else if (commands[input]->GetType() == "Candle" && commands[input]->GetItem() == true)
+                            {
+                                inventory.Add(commands[input]->GetType());
+                                candle = true;
+                            }
+
+                            if (commands[input]->GetType() == "Use Candle" && candle)
+                            {
+                                inventory.Remove(commands[input]->GetType());
+                            }
+                        }
+                        else
+                        {
+                            cout << "That's not something you can do.";
+                        }
                     }
                 }
             }
         }
-    }
-    while (isRunning);
-    
+    } while (isRunning);
 
-    return 0;
+	return 0;
 }
