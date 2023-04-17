@@ -1,3 +1,4 @@
+You already did this action.
 Entryway
 Opening your eyes, you notice yourself facing a large door with a small table to the right of it, adorning an elegant vase on top.
 The door is perhaps twice the size of an average person, its edges rounded into an arched shape at the top. There are five round indents that meet at your eye level.
@@ -7,3 +8,5 @@ An extravagantly designed vase with a single, white chrysanthemum placed inside.
 The vase crashes loudly into the ground, its broken fragments and flower strewn across. A small, white marble glistens amongst the mess.
 You gingerly pick up the marble and put it into your coat pocket.
 You turn around, taking in a hallway - its length unknown in the darkness.
+You return to the entryway.
+Main Hall

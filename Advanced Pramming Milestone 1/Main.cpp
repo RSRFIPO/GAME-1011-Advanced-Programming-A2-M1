@@ -31,45 +31,6 @@ struct Enemy
     void SetDefense(int defense) { m_defense = defense; }
 };
 
-void Attack()
-{
-    cout << "Player attacks the guard!" << endl;
-}
-
-void Defend()
-{
-    cout << "Player defended!" << endl;
-}
-
-class Command
-{
-public:
-    virtual void execute() = 0;
-    virtual bool GetProceed() = 0;
-};
-
-class AttackCommand : public Command
-{
-public:
-    void execute()
-	{
-        Attack();
-    }
-    bool GetProceed() { return proceed; }
-    bool proceed;
-};
-
-class DefendCommand : public Command
-{
-public:
-    void execute()
-	{
-        Defend();
-    }
-    bool GetProceed() { return proceed; }
-    bool proceed;
-};
-
 void savePlayerInfo(Player player, const string& fileName)
 {
     fstream file;
@@ -192,44 +153,47 @@ void loadDialog(int num, string fileName)
     }
 }
 
-class ActionCommand : public Command
+class Command
 {
 public:
-    ActionCommand(int num, bool proc = false) { number = num; proceed = proc; }
-    void execute()
+    Command(int num, string key, bool proc = false, bool act = false, bool allow = false)
     {
-        loadDialog(number, "dialog.txt");
+        number = num; proceed = proc; type = key; action = act; allowed = allow;
     }
-    bool GetProceed() { return proceed; }
-    int number;
-    bool proceed;
-};
-
-class ProceedCommand :public Command
-{
-public:
-    ProceedCommand(int num, bool proc = false) { number = num; proceed = proc; }
-    void execute()
+    void Execute()
     {
-        loadDialog(number, "dialog.txt");
-        if (proceed == false)
-            proceed = true;
+        if (action)
+        {
+	        loadDialog(1, "dialog.txt");
+        	item = false;
+        }
         else
+        {
+            loadDialog(number, "dialog.txt");
+
+            if (GetType() == "White Marble")
+                item = true;
+        	action = true;
+        }
+        if (proceed)
             proceed = false;
+        else
+            proceed = true;
     }
     bool GetProceed() { return proceed; }
+    bool GetAction() { return action; }
+    bool GetAllowed() { return allowed; }
+    bool GetItem() { return item; }
+    void SetAllowed(bool allow) { allowed = allow; }
+    string GetType() { return type; }
     int number;
-    bool proceed;
+    bool proceed, action, allowed, item = false;
+    string type;
 };
 
 int main()
 {
     map<string, Command*> commands;
-    commands["Swing Sword"] = new AttackCommand();
-    commands["swing sword"] = new AttackCommand();
-
-    commands["Raise Shield"] = new DefendCommand();
-    commands["raise shield"] = new DefendCommand();
 
     Player tempPlayer = { "Player", 10, 10, 10 };
     savePlayerInfo(tempPlayer, "player.txt");
@@ -246,70 +210,91 @@ int main()
     //cout << "Enemy health: " << enemy.m_health << endl;
     //cout << "Enemy attack: " << enemy.m_attack << endl;
     //cout << "Enemy defense: " << enemy.m_defense << "\n\n";
-    //
-    //
-    //string input;
-    //cout << "Enter a command (Swing Sword or Raise Shield): ";
-    //getline(cin, input);
-    //
-    //if (commands.count(input) > 0) 
-    //{
-    //    commands[input]->execute();
-    //    loadDialog(1, "dialog.txt");
-    //}
-    //else 
-    //{
-    //    cout << "Invalid command!" << endl;
-    //}
 
+    cout << "Warning: commands only take lower cases.\n";
 	cout << "\n\n";
-    loadDialog(1, "dialog.txt");
     loadDialog(2, "dialog.txt");
+    loadDialog(3, "dialog.txt");
 
     bool isRunning = true;
     string input;
+    int marbleCnt = 0;
+
+	commands["check door"] = new Command(4, "none");
+    commands["open door"] = new Command(5, "none");
+    commands["check table"] = new Command(6, "none");
+    commands["check vase"] = new Command(7, "none");
+    commands["break vase"] = new Command(8, "none");
+    commands["take marble"] = new Command(9, "White Marble");
+    commands["turn around"] = new Command(10, "none");
+    commands["go down"] = new Command(12, "Main Hall");
+
+    commands["go back"] = new Command(11, "Main Room");
 
     do
     {
-        commands["Go Through"] = new ProceedCommand(9);
-        bool isMainRoom = false;
-
-        cout << "\n\n";
-        getline(cin, input);
-
-        if (commands.count(input) > 0)
-        {
-            commands[input]->execute();
-            if (commands[input]->GetProceed() == true)
-                isMainRoom = true;
-            else
-                isMainRoom = false;
-        }
-        else
-        {
-            cout << "That's not something you can do.";
-        }
+        bool isMainRoom = true;
 
         while (isMainRoom)
         {
-            commands["Inspect Door"] = new ActionCommand(3);
-            commands["Inspect door"] = new ActionCommand(3);
-            commands["inspect door"] = new ActionCommand(3);
-            commands["Check Door"] = new ActionCommand(3);
-            commands["Check door"] = new ActionCommand(3);
-            commands["check door"] = new ActionCommand(3);
+            commands["check door"]->SetAllowed(true);
+            commands["open door"]->SetAllowed(true);
+            commands["check table"]->SetAllowed(true);
+            commands["check vase"]->SetAllowed(true);
+            commands["break vase"]->SetAllowed(true);
+            commands["take marble"]->SetAllowed(true);
+            commands["turn around"]->SetAllowed(true);
+            commands["go down"]->SetAllowed(true);
 
+            bool isMainHall = false;
 	        cout << "\n\n";
         	getline(cin, input);
 
         	if(commands.count(input) > 0)
         	{
-        		commands[input]->execute();
+        		commands[input]->Execute();
+                if (commands[input]->GetProceed() == true)
+                {
+                    if (commands[input]->GetType() == "Main Hall")
+                        isMainHall = true;
+                }
+                else
+                    isMainHall = false;
+
+                if (commands[input]->GetType() == "White Marble" && commands[input]->GetItem() == true)
+                {
+	                marbleCnt++;
+                	cout << marbleCnt << endl;
+                }
         	}
         	else
         	{
         		cout << "That's not something you can do.";
         	}
+
+            while (isMainHall)
+            {
+                commands["go back"]->SetAllowed(true);
+
+                cout << "\n\n";
+                getline(cin, input);
+
+                if (commands.count(input) > 0)
+                {
+                    commands[input]->Execute();
+                    if (commands[input]->GetProceed() == true)
+                    {
+	                    if (commands[input]->GetType() == "Main Room")
+	                    	isMainHall = false;
+                    }
+                    else
+                        isMainHall = true;
+                }
+                else
+                {
+                    cout << "That's not something you can do.";
+                }
+            }
         }
     }
     while (isRunning);
