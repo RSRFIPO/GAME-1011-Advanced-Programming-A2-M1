@@ -1,12 +1,53 @@
 You already did this action.
 Entryway
 Opening your eyes, you notice yourself facing a large door with a small table to the right of it, adorning an elegant vase on top.
-The door is perhaps twice the size of an average person, its edges rounded into an arched shape at the top. There are five round indents that meet at your eye level.
+The door is perhaps twice the size of an average person, its edges rounded into an arched shape at the top. There are four round indents that meet at your eye level.
 You put your hands on the door's handles, pushing, and then pulling, only to realize neither method works. The door seems to be locked.
-It is a small, yet tall table.
 An extravagantly designed vase with a single, white chrysanthemum placed inside.
-The vase crashes loudly into the ground, its broken fragments and flower strewn across. A small, white marble glistens amongst the mess.
+The vase crashes loudly into the ground, its broken fragments and flower strewn across. A small, white marble glistens amongst the mess. (Hint: try inputting "take [first letter of colour]marble") 
 You gingerly pick up the marble and put it into your coat pocket.
 You turn around, taking in a hallway - its length unknown in the darkness.
 You return to the entryway.
 Main Hall
+You step into the large hall, the lights flickering on all at once upon your presence. Glancing around, you notice three doors. One to your left, one to your right, and one straight across from you. 
+You return to the main hall.
+Music Room
+Opening the door, you are met with what seems to be a music room. The light streaming in from the open door makes all the dust floating inside visible. It seems to have been abandoned for some time. All the instruments are covered in clothes. All but a lone grand piano standing in the center of the room.
+There are music sheets left on it. It seems to be unfinished.
+You pick up the unfinished music sheet and start scribbling music notes on the empty parts. As you set the music sheet back down, a tune suddenly rings throughout the room. The piano is playing the finished music. A green marble drops onto the floor by your foot.
+You pick up the marble, blowing off the dust before putting it into your coat pocket. 
+Reception Room
+A brightly-lit reception room welcomes you, as you walk through the door. It is the first room that is already bright before you even walk in. Two long sofas are placed sitting across each other in the middle, with a low table between them. Across from you is a window with dark curtains closed over them. A writing desk sits in front of the window with two large bookshelves on either side of it.
+All the books have the same dull covers with nothing written over them. Actually, looking at them again, a few seem to have a slight bit more colour. In a decending order from left to right, there is white, blue, green, and purple covers.
+The curtains are soft to touch, but for some reason, you are unable to move them from their spot. You cannot open them.
+The desk is very clean. Nothing is on top of it but a blank piece of paper and fountain pen next to it. There are cabinets down the left side of the desk.
+You pick up the pen before inspecting it. There seems to be some ink left.
+You open the cabinets one by one, each cabinet containing piles of blank paper. The one at the very bottom, however, does not open. You can see that there is a small number pad over it.
+You input 0.
+You input 1.
+You intput 2.
+You input 3.
+You input 4.
+You input 5.
+You input 6.
+You input 7.
+You input 8.
+You input 9.
+The number pad resets. It seems that your attempt was wrong.
+You hear a small clicking sound. The cabinet seems to have been unlocked. Opening up the cabinet, you see only a small, purple marble at the bottom.
+You take the marble into your hand, before relocating it into your coat pocket.
+Dining Room
+You enter a dimly-lit dining room, the doors creaking shut behind you, making the room even dimmer. A very long table is placed in front of you. Fancy, yet sophisticated chairs line every side of the table.
+Shifting your gaze to the top of the table, you realize that not everything is placed evenly. You start counting. Six plates, nine forks, four butterknives, and eight candles, but only the one in the middle has been lit.
+The moment your hand comes into contact, it immediately starts burning against your skin, causing you to quickly take your hand away from it.
+You grab the candle, being careful to not drop the melting wax on yourself.
+With the newly acquired candle, you start lighting the other remaining candles on the dining table. As you finish lighting the last one, the room suddenly becomes very bright. The chandeliers have been lit somehow. You hear a small clinking sound. Turning your head to the source, you see a blue marble on top of one of the plates.
+You carefully pick up the marble and put it inside your coat pocket.
+Entryway
+You seem to have all the necessary items to attempt your escape now. (Hint: try inputting "[colour] marble")
+You place the white marble into the slot.
+You place the green marble into the slot.
+You place the purple marble into the slot.
+You place the blue marble into the slot.
+Slotting in the last marble into place, you step back from the door. Soon, you are met with the cold breeze of the outside. The outside is dark, and you quickly realize that it is raining as well. The house almost seems warmer to you in that moment that during your hesitation, the doors shut close in your face. You try to open them again, but to no avail. You check the marbles that you had put into the doors. They were no longer there.
+Slotting in the last marble into place, you step back from the door. Soon, you are met with the warm breeze of the outside. The outside is bright with the soft sunrays welcoming your escape. Without a second thought, you step through the open doors to the outside world.

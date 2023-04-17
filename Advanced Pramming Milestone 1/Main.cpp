@@ -158,9 +158,9 @@ void loadDialog(int num, string fileName)
 class Command
 {
 public:
-    Command(int num, string key, bool proc = false, bool act = false, bool allow = false)
+    Command(int num, string key, bool proc = false, bool act = false)
     {
-        number = num; proceed = proc; type = key; action = act; allowed = allow;
+        number = num; proceed = proc; type = key; action = act;
     }
     void Execute()
     {
@@ -179,7 +179,8 @@ public:
         {
             loadDialog(number, "dialog.txt");
 
-            if (GetType() == "White Marble")
+            if (GetType() == "White Marble" || GetType() == "Green Marble" || GetType() == "Purple Marble" ||
+                GetType() == "Blue Marble" || GetType() == "Pen" || GetType() == "Candle")
                 item = true;
         	action = true;
         }
@@ -190,12 +191,10 @@ public:
     }
     bool GetProceed() { return proceed; }
     bool GetAction() { return action; }
-    bool GetAllowed() { return allowed; }
     bool GetItem() { return item; }
-    void SetAllowed(bool allow) { allowed = allow; }
     string GetType() { return type; }
     int number;
-    bool proceed, action, allowed, item = false;
+    bool proceed, action, item = false;
     string type;
 };
 
@@ -204,42 +203,63 @@ int main()
     map<string, Command*> commands;
     List<string> inventory;
 
-    Player tempPlayer = { "Player", 10, 10, 10 };
-    savePlayerInfo(tempPlayer, "player.txt");
-    Player player = loadPlayerInfo(tempPlayer, "player.txt");
-    //cout << "\nPlayer name: " << player.name << endl;
-    //cout << "Player health: " << player.m_health << endl;
-    //cout << "Player attack: " << player.m_attack << endl;
-    //cout << "Player defense: " << player.m_defense << "\n\n";
-    //
-    //Enemy tempEnemy = { "Enemy", 5, 5, 3 };
-    //saveEnemyInfo(tempEnemy, "enemy.txt");
-	//Enemy enemy = loadEnemyInfo(tempEnemy, "enemy.txt");
-    //cout << "\nEnemy name: " << enemy.name << endl;
-    //cout << "Enemy health: " << enemy.m_health << endl;
-    //cout << "Enemy attack: " << enemy.m_attack << endl;
-    //cout << "Enemy defense: " << enemy.m_defense << "\n\n";
-
-    cout << "\nWarning: commands only take lower cases.\n";
-	cout << "\n\n";
-    loadDialog(2, "dialog.txt");
+    cout << "Warning: commands only take lower cases.\n"
+			"         and there are no boundaries between rooms. Proceed with caution.";
+	cout << "\n\n\n";
     loadDialog(3, "dialog.txt");
 
     bool isRunning = true;
+    bool knife = false, candle = false;
     string input;
     int marbleCnt = 0;
 
 	commands["check door"] = new Command(4, "none");
     commands["open door"] = new Command(5, "none");
-    commands["check table"] = new Command(6, "none");
-    commands["check vase"] = new Command(7, "none");
-    commands["break vase"] = new Command(8, "none");
-    commands["take marble"] = new Command(9, "White Marble");
-    commands["turn around"] = new Command(10, "none");
+    commands["check vase"] = new Command(6, "none");
+    commands["break vase"] = new Command(7, "none");
+    commands["take wmarble"] = new Command(8, "White Marble");
+    commands["turn around"] = new Command(9, "none");
     commands["go down"] = new Command(12, "Main Hall");
 
-    commands["go back"] = new Command(11, "Main Room");
+    commands["go back"] = new Command(10, "Main Room");
+    commands["go left"] = new Command(15, "Music Room");
+    commands["go right"] = new Command(20, "Reception Room");
+    commands["go across"] = new Command(40, "Dining Room");
 
+    commands["go hall"] = new Command(13, "Main Hall");
+    commands["check piano"] = new Command(16, "none");
+    commands["use pen"] = new Command(17, "none");
+    commands["take gmarble"] = new Command(18, "Green Marble");
+
+    commands["check bookshelf"] = new Command(21, "none");
+    commands["check curtains"] = new Command(22, "none");
+    commands["check desk"] = new Command(23, "none");
+    commands["take pen"] = new Command(24, "Pen");
+    commands["check cabinets"] = new Command(25, "none");
+    commands["input zero"] = new Command(26, "Zero");
+    commands["input one"] = new Command(27, "One");
+    commands["input two"] = new Command(28, "Two");
+    commands["input three"] = new Command(29, "Three");
+    commands["input four"] = new Command(30, "Four");
+    commands["input five"] = new Command(31, "Five");
+    commands["input six"] = new Command(32, "Six");
+    commands["input seven"] = new Command(33, "Seven");
+    commands["input eight"] = new Command(34, "Eight");
+    commands["input nine"] = new Command(35, "Nine");
+    commands["take pmarble"] = new Command(36, "Purple Marble");
+
+    commands["check table"] = new Command(41, "none");
+    commands["take plate"] = new Command(42, "none");
+    commands["take fork"] = new Command(42, "none");
+    commands["take butterknife"] = new Command(42, "none");
+    commands["take candle"] = new Command(43, "Candle");
+    commands["light candles"] = new Command(44, "none");
+    commands["take bmarble"] = new Command(45, "Blue Marble");
+
+    commands["white marble"] = new Command(48, "none");
+    commands["green marble"] = new Command(49, "none");
+    commands["purple marble"] = new Command(50, "none");
+    commands["blue marble"] = new Command(51, "none");
 
     do
     {
@@ -247,15 +267,6 @@ int main()
 
         while (isMainRoom)
         {
-            commands["check door"]->SetAllowed(true);
-            commands["open door"]->SetAllowed(true);
-            commands["check table"]->SetAllowed(true);
-            commands["check vase"]->SetAllowed(true);
-            commands["break vase"]->SetAllowed(true);
-            commands["take marble"]->SetAllowed(true);
-            commands["turn around"]->SetAllowed(true);
-            commands["go down"]->SetAllowed(true);
-
             bool isMainHall = false;
 	        cout << "\n\n";
         	getline(cin, input);
@@ -273,7 +284,8 @@ int main()
 
                 if (commands[input]->GetType() == "White Marble" && commands[input]->GetItem() == true)
                 {
-                    inventory.Add("White Marble");
+                    inventory.Add(commands[input]->GetType());
+                    marbleCnt++;
                 }
         	}
         	else
@@ -283,7 +295,9 @@ int main()
 
             while (isMainHall)
             {
-                commands["go back"]->SetAllowed(true);
+                bool isMusicRoom = false;
+                bool isReceptionRoom = false;
+                bool isDiningRoom = false;
 
                 cout << "\n\n";
                 getline(cin, input);
@@ -293,8 +307,14 @@ int main()
                     commands[input]->Execute();
                     if (commands[input]->GetProceed() == true)
                     {
-	                    if (commands[input]->GetType() == "Main Room")
-	                    	isMainHall = false;
+                        if (commands[input]->GetType() == "Main Room")
+                            isMainHall = false;
+                        else if (commands[input]->GetType() == "Music Room")
+                            isMusicRoom = true;
+                        else if (commands[input]->GetType() == "Reception Room")
+                            isReceptionRoom = true;
+                        else if (commands[input]->GetType() == "Dining Room")
+                            isDiningRoom = true;
                     }
                     else
                         isMainHall = true;
@@ -302,6 +322,93 @@ int main()
                 else
                 {
                     cout << "That's not something you can do.";
+                }
+
+                while(isMusicRoom)
+                {
+                    cout << "\n\n";
+                    getline(cin, input);
+
+                    if (commands.count(input) > 0)
+                    {
+                        commands[input]->Execute();
+                        if (commands[input]->GetProceed() == true)
+                        {
+                            if (commands[input]->GetType() == "Main Hall")
+                                isMusicRoom = false;
+                        }
+                        else
+                            isMusicRoom = true;
+                    }
+
+                    if (commands[input]->GetType() == "Green Marble" && commands[input]->GetItem() == true)
+                    {
+                        inventory.Add(commands[input]->GetType());
+                        marbleCnt++;
+                    }
+
+                    else
+                    {
+                        cout << "That's not something you can do.";
+                    }
+                }
+
+                while (isReceptionRoom)
+                {
+                    cout << "\n\n";
+                    getline(cin, input);
+
+                    if (commands.count(input) > 0)
+                    {
+                        commands[input]->Execute();
+                        if (commands[input]->GetProceed() == true)
+                        {
+                            if (commands[input]->GetType() == "Main Hall")
+                                isReceptionRoom = false;
+                        }
+                        else
+                            isReceptionRoom = true;
+                    }
+
+                    if (commands[input]->GetType() == "Purple Marble" && commands[input]->GetItem() == true)
+                    {
+                        inventory.Add(commands[input]->GetType());
+                        marbleCnt++;
+                    }
+
+                    else
+                    {
+                        cout << "That's not something you can do.";
+                    }
+                }
+
+                while (isDiningRoom)
+                {
+                    cout << "\n\n";
+                    getline(cin, input);
+
+                    if (commands.count(input) > 0)
+                    {
+                        commands[input]->Execute();
+                        if (commands[input]->GetProceed() == true)
+                        {
+                            if (commands[input]->GetType() == "Main Hall")
+                                isDiningRoom = false;
+                        }
+                        else
+                            isDiningRoom = true;
+                    }
+
+                    if (commands[input]->GetType() == "Blue Marble" && commands[input]->GetItem() == true)
+                    {
+                        inventory.Add(commands[input]->GetType());
+                        marbleCnt++;
+                    }
+
+                    else
+                    {
+                        cout << "That's not something you can do.";
+                    }
                 }
             }
         }
